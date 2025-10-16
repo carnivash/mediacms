@@ -88,7 +88,7 @@ SHOW_ORIGINAL_MEDIA = True
 
 MAX_MEDIA_PER_PLAYLIST = 70
 # bytes, size of uploaded media
-UPLOAD_MAX_SIZE = 800 * 1024 * 1000 * 5
+UPLOAD_MAX_SIZE = 800 * 1024 * 10000 * 5
 
 MAX_CHARS_FOR_COMMENT = 10000  # so that it doesn't end up huge
 TIMESTAMP_IN_TIMEBAR = False  # shows timestamped comments in the timebar for videos
