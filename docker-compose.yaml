@@ -12,8 +12,8 @@ services:
       ENABLE_CELERY_LONG: 'no'
       ENABLE_CELERY_BEAT: 'no'
       ADMIN_USER: 'admin'
-      ADMIN_EMAIL: 'admin@localhost'
-      # ADMIN_PASSWORD: 'uncomment_and_set_password_here'
+      ADMIN_EMAIL: 'carnivash@gmail.com'
+      ADMIN_PASSWORD: 'proj2501'
     command: "./deploy/docker/prestart.sh"
     restart: on-failure
     depends_on:
@@ -26,7 +26,7 @@ services:
     deploy:
       replicas: 1
     ports:
-      - "80:80"
+      - "8004:80"
     volumes:
       - ./:/home/mediacms.io/mediacms/
     environment:
