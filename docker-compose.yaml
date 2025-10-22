@@ -12,6 +12,7 @@ services:
       ADMIN_USER: 'admin'
       ADMIN_EMAIL: 'carnivash@gmail.com'
       ADMIN_PASSWORD: 'proj2501'
+    entrypoint: ["/bin/sh", "-c"]
     working_dir: /home/mediacms.io/mediacms/
     command: "./deploy/docker/prestart.sh"
     restart: on-failure
