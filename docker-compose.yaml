@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   migrations:
     image: mediacms/mediacms:latest
@@ -14,7 +12,7 @@ services:
       ADMIN_USER: 'admin'
       ADMIN_EMAIL: 'carnivash@gmail.com'
       ADMIN_PASSWORD: 'proj2501'
-    command: "./deploy/docker/prestart.sh"
+    command: "bash -c 'bash /home/mediacms.io/mediacms/deploy/docker/prestart.sh'"
     restart: on-failure
     depends_on:
       redis:
