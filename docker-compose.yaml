@@ -1,6 +1,9 @@
 services:
   migrations:
     image: mediacms/mediacms:latest
+    working_dir: /home/mediacms.io/mediacms/
+    entrypoint: ["/bin/sh", "-c"]
+    command: "./deploy/docker/prestart.sh"
     volumes:
       - ./:/home/mediacms.io/mediacms/
     environment:
@@ -12,23 +15,22 @@ services:
       ADMIN_USER: 'admin'
       ADMIN_EMAIL: 'carnivash@gmail.com'
       ADMIN_PASSWORD: 'proj2501'
-    entrypoint: ["/bin/sh", "-c"]
-    working_dir: /home/mediacms.io/mediacms/
-    command: "./deploy/docker/prestart.sh"
     restart: on-failure
     depends_on:
       redis:
         condition: service_healthy
       db:
         condition: service_healthy
+
   web:
     image: mediacms/mediacms:latest
-    deploy:
-      replicas: 1
+    entrypoint: ["/bin/sh", "-c"]
+    command: "uwsgi --ini ./deploy/docker/uwsgi.ini"
+    working_dir: /home/mediacms.io/mediacms/
     ports:
       - "8004:80"
     volumes:
-      - /home/alexander/mediacms/:/home/mediacms.io/mediacms/
+      - /home/alexander/mediacms:/home/mediacms.io/mediacms/
     environment:
       ENABLE_CELERY_BEAT: 'no'
       ENABLE_CELERY_SHORT: 'no'
@@ -36,8 +38,12 @@ services:
       ENABLE_MIGRATIONS: 'no'
     depends_on:
       - migrations
+
   celery_beat:
     image: mediacms/mediacms:latest
+    entrypoint: ["/bin/sh", "-c"]
+    command: "celery -A mediacms beat -l info"
+    working_dir: /home/mediacms.io/mediacms/
     volumes:
       - /home/alexander/mediacms:/home/mediacms.io/mediacms/
     environment:
@@ -48,10 +54,12 @@ services:
       ENABLE_MIGRATIONS: 'no'
     depends_on:
       - redis
+
   celery_worker:
     image: mediacms/mediacms:latest
-    deploy:
-      replicas: 1
+    entrypoint: ["/bin/sh", "-c"]
+    command: "celery -A mediacms worker -l info"
+    working_dir: /home/mediacms.io/mediacms/
     volumes:
       - /home/alexander/mediacms:/home/mediacms.io/mediacms/
     environment:
@@ -61,6 +69,7 @@ services:
       ENABLE_MIGRATIONS: 'no'
     depends_on:
       - migrations
+
   db:
     image: postgres:17.2-alpine
     volumes:
@@ -70,12 +79,13 @@ services:
       POSTGRES_USER: mediacms
       POSTGRES_PASSWORD: mediacms
       POSTGRES_DB: mediacms
-      TZ: AmAmerica/Sao_Paulo
+      TZ: America/Sao_Paulo
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
       interval: 10s
       timeout: 5s
       retries: 5
+
   redis:
     image: "redis:alpine"
     restart: always
