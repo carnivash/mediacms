@@ -12,7 +12,7 @@ services:
       ADMIN_USER: 'admin'
       ADMIN_EMAIL: 'carnivash@gmail.com'
       ADMIN_PASSWORD: 'proj2501'
-    command: ["/bin/bash", "-c", "bash /home/mediacms.io/mediacms/deploy/docker/prestart.sh"]
+    command: ["/etc/dokploy/compose/selfhosted-mediacms-0squkd/code/prestart.sh"]
     restart: on-failure
     depends_on:
       redis:
